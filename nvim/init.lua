@@ -1,45 +1,21 @@
-require('basics')
-require('colors')
-require('telescope-config')
-require('coc-config')
-require('lualine').setup()
+-- try to call custom init
+pcall(require, "custom")
 
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
-  context_commentstring = {
-    enable = true
-  },
-  highlight = {
-    enable = true
-  },
-  indent = {
-    enable = true
-  }
+local core_modules = {
+   "core.options",
+   "core.autocmds",
+   "core.mappings",
 }
 
-return require('packer').startup(function(use)
-  use 'wbthomason/packer.nvim'
-  use {'neoclide/coc.nvim', branch = 'release'}
-  use 'folke/tokyonight.nvim'
-  use 'nvim-treesitter/nvim-treesitter'
-  use 'tpope/vim-commentary'
-  use 'JoosepAlviste/nvim-ts-context-commentstring'
-  use 'ThePrimeagen/git-worktree.nvim'
-  use 'tpope/vim-fugitive'
-  use 'tmsvg/pear-tree'
-  use 'glepnir/dashboard-nvim'
-  use {
-    'nvim-lualine/lualine.nvim',
-    requires = {'kyazdani42/nvim-web-devicons', opt = true}
-  }
-  use {
-    'nvim-telescope/telescope.nvim',
-    requires = { {'nvim-lua/plenary.nvim'} }
-  }
-  use {
-    "blackCauldron7/surround.nvim",
-    config = function()
-      require"surround".setup {mappings_style = "surround"}
-    end
-  }
-end)
+for _, module in ipairs(core_modules) do
+   local ok, err = pcall(require, module)
+   if not ok then
+      error("Error loading " .. module .. "\n\n" .. err)
+   end
+end
+
+-- Custom font for neovide
+vim.o.guifont = "FiraCode Nerd Font:h11"
+
+-- non plugin mappings
+require("core.mappings").misc()
