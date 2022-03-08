@@ -9,9 +9,10 @@ M.setup_lsp = function(attach, capabilities)
      "html",
      "cssls",
      "pyright",
-     "solargraph",
      "sumneko_lua",
-     "dockerls"
+     "tsserver",
+     "gopls",
+     "sqlls"
    }
 
    for _, lsp in ipairs(servers) do
@@ -28,18 +29,23 @@ M.setup_lsp = function(attach, capabilities)
      settings = {
        ["rust_analyzer"] = {
          checkOnSave = {
-           command = "clippy"
+          command = "clippy"
+         },
+         inlayHints = {
+          typeHints = true
          }
        }
      }
    }
 
-   -- Typsecript
-   lspconfig.tsserver.setup {
-      on_attach = function(client, bufnr)
-         client.resolved_capabilities.document_formatting = false
-         vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>fm", "<cmd>lua vim.lsp.buf.formatting()<CR>", {})
-      end,
+   lspconfig.solargraph.setup {
+     on_attach = attach,
+     capabilities = capabilities,
+     settings = {
+       onSave = {
+         command = 'rubocop -a'
+       }
+     }
    }
 end
 
