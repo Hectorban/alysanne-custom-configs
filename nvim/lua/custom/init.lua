@@ -1,11 +1,3 @@
-local hooks = require "core.hooks"
-
-hooks.add("install_plugins", function(use)
-   use "simrat39/rust-tools.nvim"
-   use {
-     "blackCauldron7/surround.nvim",
-     config = function()
-       require"surround".setup {mappings_style = "surround"}
-     end
-   }
-end)
+vim.o.guifont = "FiraCode Nerd Font:h11"
+vim.g.neovide_transparency = 0.7
+vim.g.neovide_cursor_vfx_mode = "Railgun"

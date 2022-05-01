@@ -12,7 +12,10 @@ M.setup_lsp = function(attach, capabilities)
      "sumneko_lua",
      "tsserver",
      "gopls",
-     "sqlls"
+     "eslint",
+     "sqlls",
+     "tailwindcss",
+     "clojure_lsp"
    }
 
    for _, lsp in ipairs(servers) do

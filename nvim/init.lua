@@ -1,5 +1,8 @@
--- try to call custom init
-pcall(require, "custom")
+local present, impatient = pcall(require, "impatient")
+
+if present then
+   impatient.enable_profile()
+end
 
 local core_modules = {
    "core.options",
@@ -14,10 +17,15 @@ for _, module in ipairs(core_modules) do
    end
 end
 
--- Custom font for neovide
-vim.o.guifont = "FiraCode Nerd Font:h11"
-vim.g.neovide_transparency = 0.7
-vim.g.neovide_cursor_vfx_mode = "railgun"
-
 -- non plugin mappings
 require("core.mappings").misc()
+
+-- check if custom init.lua file exists
+if vim.fn.filereadable(vim.fn.stdpath "config" .. "/lua/custom/init.lua") == 1 then
+   -- try to call custom init, if not successful, show error
+   local ok, err = pcall(require, "custom")
+   if not ok then
+      vim.notify("Error loading custom/init.lua\n\n" .. err)
+   end
+   return
+end

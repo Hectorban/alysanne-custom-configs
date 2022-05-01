@@ -1,14 +1,25 @@
 local utils = require "core.utils"
-local hooks = require "core.hooks"
 
 local config = utils.load_config()
-local map = utils.map
+local map_wrapper = utils.map
 
 local maps = config.mappings
 local plugin_maps = maps.plugins
 local nvChad_options = config.options.nvChad
+local terminal_options = config.options.terminal
 
 local cmd = vim.cmd
+
+-- This is a wrapper function made to disable a plugin mapping from chadrc
+-- If keys are nil, false or empty string, then the mapping will be not applied
+-- Useful when one wants to use that keymap for any other purpose
+local map = function(...)
+   local keys = select(2, ...)
+   if not keys or keys == "" then
+      return
+   end
+   map_wrapper(...)
+end
 
 local M = {}
 
@@ -16,36 +27,34 @@ local M = {}
 M.misc = function()
    local function non_config_mappings()
       -- Don't copy the replaced text after pasting in visual mode
-      map("v", "p", '"_dP')
+      map_wrapper("v", "p", "p:let @+=@0<CR>")
       map('n', 'vs', ':vs<CR>')
+      
 
       -- Allow moving the cursor through wrapped lines with j, k, <Up> and <Down>
       -- http://www.reddit.com/r/vim/comments/2k4cbr/problem_with_gj_and_gk/
       -- empty mode is same as using :map
       -- also don't use g[j|k] when in operator pending mode, so it doesn't alter d, y or c behaviour
-      map("", "j", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
-      map("", "k", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
-      map("", "<Down>", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
-      map("", "<Up>", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
+      map_wrapper({ "n", "x", "o" }, "j", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
+      map_wrapper({ "n", "x", "o" }, "k", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
+      map_wrapper("", "<Down>", 'v:count || mode(1)[0:1] == "no" ? "j" : "gj"', { expr = true })
+      map_wrapper("", "<Up>", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
 
       -- use ESC to turn off search highlighting
-      map("n", "<Esc>", ":noh <CR>")
+      map_wrapper("n", "<Esc>", ":noh <CR>")
 
       -- center cursor when moving (goto_definition)
-
-      -- yank from current cursor to end of line
-      map("n", "Y", "yg$")
    end
 
    local function optional_mappings()
       -- don't yank text on cut ( x )
       if not nvChad_options.copy_cut then
-         map({ "n", "v" }, "x", '"_x')
+         map_wrapper({ "n", "v" }, "x", '"_x')
       end
 
       -- don't yank text on delete ( dd )
       if not nvChad_options.copy_del then
-         map({ "n", "v" }, "d", '"_d')
+         map_wrapper({ "n", "v" }, "d", '"_d')
       end
 
       -- navigation within insert mode
@@ -55,8 +64,8 @@ M.misc = function()
          map("i", inav.backward, "<Left>")
          map("i", inav.end_of_line, "<End>")
          map("i", inav.forward, "<Right>")
-         map("i", inav.next_line, "<Up>")
-         map("i", inav.prev_line, "<Down>")
+         map("i", inav.next_line, "<Down>")
+         map("i", inav.prev_line, "<Up>")
          map("i", inav.beginning_of_line, "<ESC>^i")
       end
 
@@ -74,10 +83,11 @@ M.misc = function()
    local function required_mappings()
       map("n", maps.misc.cheatsheet, ":lua require('nvchad.cheatsheet').show() <CR>") -- show keybinds
       map("n", maps.misc.close_buffer, ":lua require('core.utils').close_buffer() <CR>") -- close  buffer
-      map("n", maps.misc.copy_whole_file, ":%y+ <CR>") -- copy whole file content
+      map("n", maps.misc.cp_whole_file, ":%y+ <CR>") -- copy whole file content
       map("n", maps.misc.new_buffer, ":enew <CR>") -- new buffer
       map("n", maps.misc.new_tab, ":tabnew <CR>") -- new tabs
-      map("n", maps.misc.line_number_toggle, ":set nu! <CR>") -- toggle numbers
+      map("n", maps.misc.lineNR_toggle, ":set nu! <CR>")
+      map("n", maps.misc.lineNR_rel_toggle, ":set rnu! <CR>") -- relative line numbers
       map("n", maps.misc.save_file, ":w <CR>") -- ctrl + s to save file
 
       -- terminal mappings --
@@ -85,14 +95,40 @@ M.misc = function()
       -- get out of terminal mode
       map("t", term_maps.esc_termmode, "<C-\\><C-n>")
       -- hide a term from within terminal mode
-      map("t", term_maps.esc_hide_termmode, "<C-\\><C-n> :lua require('core.utils').close_buffer() <CR>")
+      map("t", term_maps.esc_hide_termmode, "<CMD>lua require('nvchad.terminal').hide() <CR>")
       -- pick a hidden term
       map("n", term_maps.pick_term, ":Telescope terms <CR>")
       -- Open terminals
       -- TODO this opens on top of an existing vert/hori term, fixme
-      map("n", term_maps.new_horizontal, ":execute 15 .. 'new +terminal' | let b:term_type = 'hori' | startinsert <CR>")
-      map("n", term_maps.new_vertical, ":execute 'vnew +terminal' | let b:term_type = 'vert' | startinsert <CR>")
-      map("n", term_maps.new_window, ":execute 'terminal' | let b:term_type = 'wind' | startinsert <CR>")
+      map(
+         { "n", "t" },
+         term_maps.new_horizontal,
+         "<CMD>lua require('nvchad.terminal').new_or_toggle('horizontal', "
+            .. tostring(terminal_options.window.split_height)
+            .. ")<CR>"
+      )
+      map(
+         { "n", "t" },
+         term_maps.new_vertical,
+         "<CMD>lua require('nvchad.terminal').new_or_toggle('vertical', "
+            .. tostring(terminal_options.window.vsplit_width)
+            .. ")<CR>"
+      )
+      map(
+         { "n", "t" },
+         term_maps.new_float,
+         "<CMD>lua require('nvchad.terminal').new_or_toggle('float')<CR>"
+      )
+
+      -- spawns terminals
+      map(
+         "n",
+         term_maps.spawn_horizontal,
+         ":execute 15 .. 'new +terminal' | let b:term_type = 'hori' | startinsert <CR>"
+      )
+      map("n", term_maps.spawn_vertical, ":execute 'vnew +terminal' | let b:term_type = 'vert' | startinsert <CR>")
+      map("n", term_maps.spawn_window, ":execute 'terminal' | let b:term_type = 'wind' | startinsert <CR>")
+
       -- terminal mappings end --
 
       -- Add Packer commands because we are not loading it at startup
@@ -111,7 +147,6 @@ M.misc = function()
    non_config_mappings()
    optional_mappings()
    required_mappings()
-   hooks.run("setup_mappings", map)
 end
 
 -- below are all plugin related mappings
@@ -127,16 +162,6 @@ M.comment = function()
    local m = plugin_maps.comment.toggle
    map("n", m, ":lua require('Comment.api').toggle_current_linewise()<CR>")
    map("v", m, ":lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>")
-end
-
-M.dashboard = function()
-   local m = plugin_maps.dashboard
-
-   map("n", m.bookmarks, ":DashboardJumpMarks <CR>")
-   map("n", m.new_file, ":DashboardNewFile <CR>")
-   map("n", m.open, ":Dashboard <CR>")
-   map("n", m.session_load, ":SessionLoad <CR>")
-   map("n", m.session_save, ":SessionSave <CR>")
 end
 
 M.lspconfig = function()
@@ -172,7 +197,7 @@ M.telescope = function()
 
    map("n", m.buffers, ":Telescope buffers <CR>")
    map("n", m.find_files, ":Telescope find_files <CR>")
-   map("n", m.find_hiddenfiles, ":Telescope find_files no_ignore=true hidden=true <CR>")
+   map("n", m.find_hiddenfiles, ":Telescope find_files follow=true no_ignore=true hidden=true <CR>")
    map("n", m.git_commits, ":Telescope git_commits <CR>")
    map("n", m.git_status, ":Telescope git_status <CR>")
    map("n", m.help_tags, ":Telescope help_tags <CR>")
