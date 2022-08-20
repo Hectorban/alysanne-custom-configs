@@ -1,31 +1,34 @@
-local present, impatient = pcall(require, "impatient")
+local autocmd = vim.api.nvim_create_autocmd
+local new_cmd = vim.api.nvim_create_user_command
+local opt = vim.opt
+local g = vim.g
+local o = vim.o
 
-if present then
-   impatient.enable_profile()
-end
+-- autocmds
+autocmd("FileType", {
+   pattern = "norg",
+   callback = function()
+      -- vim.opt.laststatus = 0
+      opt.number = false
+      opt.showtabline = 0
+      opt.cole = 1
+      opt.foldlevel = 10
+   end,
+})
 
-local core_modules = {
-   "core.options",
-   "core.autocmds",
-   "core.mappings",
-}
+o.guifont = "FiraCode Nerd Font:h11"
+g.neovide_transparency = 0.7
+g.neovide_cursor_vfx_mode = "Railgun"
 
-for _, module in ipairs(core_modules) do
-   local ok, err = pcall(require, module)
-   if not ok then
-      error("Error loading " .. module .. "\n\n" .. err)
-   end
-end
+-- commands
 
--- non plugin mappings
-require("core.mappings").misc()
+-- I dont use shade.nvim/autosave.nvim all the time so made commands for them 
+-- So this makes easy to lazy load them at cmds
 
--- check if custom init.lua file exists
-if vim.fn.filereadable(vim.fn.stdpath "config" .. "/lua/custom/init.lua") == 1 then
-   -- try to call custom init, if not successful, show error
-   local ok, err = pcall(require, "custom")
-   if not ok then
-      vim.notify("Error loading custom/init.lua\n\n" .. err)
-   end
-   return
-end
+new_cmd("EnableShade", function()
+   require("shade").setup()
+end, {})
+
+new_cmd("EnableAutosave", function()
+   require("autosave").setup()
+end, {})
