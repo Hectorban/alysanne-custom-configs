@@ -11,6 +11,11 @@ exec --no-startup-id ~/set_once_i3.sh
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 font pango: Firacode Nerd Font 11
 
+default_border pixel 1
+default_floating_border pixel 1
+new_window 1pixel
+for_window [class="^.*"] border pixel 1
+
 # set the mod key to the winkey:
 set $mod Mod4
 

@@ -20,9 +20,33 @@ M.treesitter = {
       "fish",
       "clojure",
       "ruby",
-      "go"
+      "go",
+      "graphql",
+      "python",
    },
 }
+
+M.mason = {
+  ensure_installed = {
+    "lua-language-server",
+    "stylua",
+    "css-lsp",
+    "html-lsp",
+    "typescript-language-server",
+    "deno",
+    "emmet-ls",
+    "json-lsp",
+    "shfmt",
+    "shellcheck",
+    "clojure-lsp",
+    "gopls",
+    "solargraph",
+    "rubocop",
+    "sqls",
+    "rust-analyzer",
+  },
+}
+
 
 M.nvimtree = {
    git = {

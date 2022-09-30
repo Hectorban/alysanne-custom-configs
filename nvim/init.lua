@@ -17,7 +17,7 @@ autocmd("FileType", {
 })
 
 o.guifont = "FiraCode Nerd Font:h11"
-g.neovide_transparency = 0.7
+g.neovide_transparency = 0.8
 g.neovide_cursor_vfx_mode = "Railgun"
 
 -- commands
