@@ -7,20 +7,24 @@ end
 local b = null_ls.builtins
 
 local sources = {
+  b.formatting.deno_fmt,
+  b.formatting.prettier.with { filetypes = { "html", "markdown", "css" } },
+  b.formatting.clang_format,
+  b.formatting.stylua,
+  b.formatting.shfmt,
+  b.formatting.eslint,
+  b.formatting.fixjson,
+  b.formatting.prettier,
+  b.formatting.prettier_eslint,
+  b.formatting.rubocop,
 
-   -- webdev stuff
-   b.formatting.deno_fmt,
-   b.formatting.prettier.with { filetypes = { "html", "markdown", "css" } },
+  b.diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
+  b.diagnostics.eslint,
+  b.diagnostics.fish,
+  b.diagnostics.pylint,
+  b.diagnostics.rubocop,
 
-   -- Lua
-   b.formatting.stylua,
-
-   -- Shell
-   b.formatting.shfmt,
-   b.diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
-
-   -- cpp
-   b.formatting.clang_format,
+  b.code_actions.eslint,
 }
 
 null_ls.setup {

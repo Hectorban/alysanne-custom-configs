@@ -21,7 +21,7 @@ M.plugins = {
 }
 
 M.ui = {
-   theme = "kanagawa",
+   theme = "gatekeeper",
    hl_add = require "custom.highlights",
    theme_toggle = { "gruvchad", "gruvbox_light" },
 }

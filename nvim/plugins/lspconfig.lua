@@ -6,7 +6,8 @@ local lspconfig = require "lspconfig"
 local servers = {
   "html",
   "cssls",
-  "sumneko_lua",
+  "lua_ls",
+  "emmet_ls",
   "tsserver",
   "gopls",
   "eslint",
@@ -18,7 +19,9 @@ local servers = {
   "jsonls",
   "graphql",
   "terraformls",
-  "pylsp"
+  "pylsp",
+  "solidity",
+  "svelte"
 }
 
 for _, lsp in ipairs(servers) do
