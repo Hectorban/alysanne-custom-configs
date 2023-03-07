@@ -14,24 +14,14 @@ return {
          require "custom.plugins.lspconfig"
        end,
    },
+   ["github/copilot.vim"] = {},
+   ["eandrju/cellular-automaton.nvim"] = {},
 
    -- format & linting
    ["jose-elias-alvarez/null-ls.nvim"] = {
       after = "nvim-lspconfig",
       config = function()
          require "custom.plugins.null-ls"
-      end,
-   },
-
-   -- minimal modes
-   ["Pocco81/TrueZen.nvim"] = {
-      cmd = {
-         "TZAtaraxis",
-         "TZMinimalist",
-         "TZFocus",
-      },
-      config = function()
-         require "custom.plugins.truezen"
       end,
    },
 
@@ -50,8 +40,10 @@ return {
       end,
    },
 
-   ["shaunsingh/oxocarbon.nvim"] = {
-      cmd = './install.sh'
+   ["kylechui/nvim-surround"] = {
+      config = function()
+         require("nvim-surround").setup()
+      end,
    },
 
    -- dim inactive windows

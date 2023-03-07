@@ -17,7 +17,7 @@ function vim
 end
 
 function fish_greeting
-  figlet -f slant "3301"
+  ascii-image-converter ~/navi.jpg -C -d 22,12
 end
 
 set -Ux fish_user_paths $HOME/.anyenv/bin $fish_user_paths

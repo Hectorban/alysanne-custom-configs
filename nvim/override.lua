@@ -23,6 +23,7 @@ M.treesitter = {
       "go",
       "graphql",
       "python",
+      "fish",
    },
 }
 
@@ -44,6 +45,12 @@ M.mason = {
     "rubocop",
     "sqls",
     "rust-analyzer",
+    "dockerfile-language-server",
+    "eslint-lsp",
+    "haskell-language-server",
+    "jsonlint",
+    "prettier",
+    "ruby-lsp"
   },
 }
 
