@@ -1,29 +1,29 @@
--- overriding default plugin configs!
-
 local M = {}
 
 M.treesitter = {
    ensure_installed = {
-      "vim",
-      "html",
-      "css",
-      "javascript",
-      "json",
-      "toml",
-      "markdown",
-      "c",
-      "bash",
-      "lua",
-      "norg",
-      "rust",
-      "vim",
-      "fish",
-      "clojure",
-      "ruby",
-      "go",
-      "graphql",
-      "python",
-      "fish",
+    "vim",
+    "html",
+    "css",
+    "javascript",
+    "json",
+    "toml",
+    "markdown",
+    "c",
+    "bash",
+    "lua",
+    "norg",
+    "rust",
+    "vim",
+    "fish",
+    "clojure",
+    "ruby",
+    "go",
+    "graphql",
+    "python",
+    "fish",
+    "tsx",
+    "scss"
    },
 }
 

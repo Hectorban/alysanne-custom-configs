@@ -5,6 +5,7 @@ end
 
 set -lx SHELL $__fish_bin_dir/fish
 set -lx BROWSER /usr/bin/google-chrome-stable
+set -lx EDITOR /usr/bin/nvim
 
 eval (keychain --eval --quiet ~/.ssh/Aleph-ssh)
 alias cz "npx git-cz -S --disable-emoji"

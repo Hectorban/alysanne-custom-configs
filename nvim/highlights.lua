@@ -1,34 +1,19 @@
-local M = {
+-- To find any highlight groups: "<cmd> Telescope highlights"
+-- Each highlight group can take a table with variables fg, bg, bold, italic, etc
+-- base30 variable names can also be used as colors
 
-   -- Neorg
+local M = {}
 
-   NeorgCodeBlock = { bg = "black2" },
+---@type Base46HLGroupsList
+M.override = {
+  Comment = {
+    italic = true,
+  },
+}
 
-   -- unordered lists
-   NeorgUnorderedList1 = { fg = "grey" },
-   NeorgUnorderedList2 = { fg = "grey" },
-   NeorgUnorderedList3 = { fg = "grey" },
-   NeorgUnorderedList4 = { fg = "grey" },
-   NeorgUnorderedList5 = { fg = "grey" },
-   NeorgUnorderedList6 = { fg = "grey" },
-
-   -- headings
-   NeorgHeading1Title = { fg = "white", bold = true },
-   NeorgHeading1Prefix = { fg = "white", bold = true },
-
-   NeorgHeading4Title = { fg = "blue", bold = true },
-   NeorgHeading4Prefix = { fg = "blue", bold = true },
-
-   NeorgHeading5Title = { fg = "red", bold = true },
-   NeorgHeading5Prefix = { fg = "red", bold = true },
-
-   NeorgHeading6Title = { fg = "purple", bold = true },
-   NeorgHeading6Prefix = { fg = "purple", bold = true },
-
-   NeorgMarkUpBold = {
-      fg = "red",
-      bold = true,
-   },
+---@type HLTable
+M.add = {
+  NvimTreeOpenedFolderName = { fg = "green", bold = true },
 }
 
 return M
