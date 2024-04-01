@@ -17,9 +17,11 @@ local sources = {
   b.formatting.prettier,
   b.formatting.prettier_eslint,
   b.formatting.rubocop,
+  b.formatting.rustfmt,
 
   b.diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
   b.diagnostics.eslint,
+  b.diagnostics.jsonlint,
   b.diagnostics.fish,
   b.diagnostics.pylint,
   b.diagnostics.rubocop,

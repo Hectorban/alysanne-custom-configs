@@ -23,6 +23,7 @@ local servers = {
   "pylsp",
   "solidity",
   "svelte",
+  "rust_analyzer"
 }
 
 for _, lsp in ipairs(servers) do

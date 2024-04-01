@@ -50,7 +50,8 @@ M.mason = {
     "haskell-language-server",
     "jsonlint",
     "prettier",
-    "ruby-lsp"
+    "ruby-lsp",
+    "taplo"
   },
 }
 

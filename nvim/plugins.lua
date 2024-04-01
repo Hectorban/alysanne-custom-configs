@@ -1,4 +1,4 @@
-local overrides = require("custom.configs.overrides")
+local overrides = require "custom.configs.overrides"
 
 ---@type NvPluginSpec[]
 local plugins = {
@@ -25,7 +25,7 @@ local plugins = {
   -- override plugin configs
   {
     "williamboman/mason.nvim",
-    opts = overrides.mason
+    opts = overrides.mason,
   },
 
   {
@@ -43,6 +43,11 @@ local plugins = {
     opts = overrides.blankline,
   },
 
+  {
+    "tpope/vim-fugitive",
+    opts = overrides.blankline,
+  },
+
   -- Install a plugin
   {
     "max397574/better-escape.nvim",
@@ -52,14 +57,13 @@ local plugins = {
     end,
   },
 
-  {"github/copilot.vim"},
-  {"eandrju/cellular-automaton.nvim"},
+  { "eandrju/cellular-automaton.nvim" },
   {
     "simrat39/rust-tools.nvim",
     lazy = false,
-    config = function ()
-      require('rust-tools').setup()
-    end
+    config = function()
+      require("rust-tools").setup()
+    end,
   },
 
   {
@@ -76,13 +80,11 @@ local plugins = {
     end,
   },
 
-
   -- To make a plugin not be loaded
   -- {
   --   "NvChad/nvim-colorizer.lua",
   --   enabled = false
   -- },
-
 }
 
 return plugins
