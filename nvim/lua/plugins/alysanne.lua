@@ -1,28 +1,15 @@
-local overrides = require "custom.configs.overrides"
+local overrides = require "configs.overrides"
 
 ---@type NvPluginSpec[]
 local plugins = {
-
-  -- Override plugin definition options
-
   {
     "neovim/nvim-lspconfig",
-    dependencies = {
-      -- format & linting
-      {
-        "jose-elias-alvarez/null-ls.nvim",
-        config = function()
-          require "custom.configs.null-ls"
-        end,
-      },
-    },
     config = function()
-      require "plugins.configs.lspconfig"
-      require "custom.configs.lspconfig"
-    end, -- Override to setup mason-lspconfig
+      require("nvchad.configs.lspconfig").defaults()
+      require "configs.lspconfig"
+    end,
   },
 
-  -- override plugin configs
   {
     "williamboman/mason.nvim",
     opts = overrides.mason,
@@ -40,7 +27,9 @@ local plugins = {
 
   {
     "lukas-reineke/indent-blankline.nvim",
-    opts = overrides.blankline,
+    config = function ()
+      require("ibl").setup()
+    end,
   },
 
   {
@@ -48,26 +37,16 @@ local plugins = {
     opts = overrides.blankline,
   },
 
-  -- Install a plugin
   {
     "max397574/better-escape.nvim",
-    event = "InsertEnter",
     config = function()
       require("better_escape").setup()
     end,
   },
 
-  { "eandrju/cellular-automaton.nvim" },
   {
     "simrat39/rust-tools.nvim",
     lazy = false,
-    config = function()
-      require("rust-tools").setup()
-    end,
-  },
-
-  {
-    "simrat39/rust-tools.nvim",
     config = function()
       require("rust-tools").setup()
     end,
@@ -80,11 +59,23 @@ local plugins = {
     end,
   },
 
-  -- To make a plugin not be loaded
-  -- {
-  --   "NvChad/nvim-colorizer.lua",
-  --   enabled = false
-  -- },
+  {
+    "nvim-telescope/telescope.nvim",
+    opts = function()
+      local conf = require "nvchad.configs.telescope"
+
+      conf.defaults.mappings.i = {
+        ["<C-p>"] = { "<cmd> Telescope find_files <CR>", "  find files" },
+        ["<C-f>"] = { "<cmd> Telescope live_grep <CR>", "   live grep" },
+        ["<leader>gc"] = { "<cmd> Telescope git_commits <CR>", "   git commits" },
+      }
+
+     -- or 
+     -- table.insert(conf.defaults.mappings.i, your table)
+
+      return conf
+    end,
+  }
 }
 
 return plugins
