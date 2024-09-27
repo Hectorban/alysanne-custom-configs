@@ -23,7 +23,6 @@ local servers = {
   "pylsp",
   "solidity",
   "svelte",
-  "rust_analyzer"
 }
 
 -- lsps with default config

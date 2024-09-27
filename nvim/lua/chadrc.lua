@@ -5,7 +5,10 @@
 local M = {}
 
 M.ui = {
-	theme = "material-darker",
+  nvdash = {
+    load_on_startup = true,
+  },
+	theme = "chadracula-evondev",
 
 	-- hl_override = {
 	-- 	Comment = { italic = true },

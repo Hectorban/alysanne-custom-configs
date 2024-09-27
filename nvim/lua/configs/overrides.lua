@@ -51,7 +51,8 @@ M.mason = {
     "jsonlint",
     "prettier",
     "ruby-lsp",
-    "taplo"
+    "taplo",
+    "llm-ls"
   },
 }
 
